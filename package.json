@@ -1,0 +1,17 @@
+{
+	"name": "sky-view",
+	"version": "0.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "jest"
+	},
+	"author": "linsk",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/jest": "^26.0.4",
+		"jest": "^26.1.0",
+		"ts-jest": "^26.1.3",
+		"typescript": "^3.9.7"
+	}
+}

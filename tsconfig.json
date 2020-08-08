@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"lib": [ // 编译过程中需要引入的库文件的列表
+			"DOM",
+			"ES5",
+			"ES2015.Core",
+			"ES2015.Iterable",
+			"ES2015.Promise",
+			"ES2015.Reflect",
+			"ES2015.Symbol",
+			"ES2016.Array.Include",
+			"ES2017.String",
+			"ES2019.String"
+		],
+		"experimentalDecorators": true, // 启用实验性的ES装饰器
+		"jsx": "react", // 在 .tsx文件里支持JSX
+		"sourceMap": true, // 是否生成map文件
+		"module": "ES6", // 指定生成哪个模块系统代码
+		"target": "ES5",
+		"esModuleInterop":true
+	},
+	"include": [
+		"./jest/**/*"
+	]
+}
