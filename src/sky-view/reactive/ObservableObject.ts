@@ -1,11 +1,12 @@
 
-import {KEY_OBSERVABLE,KEY_COMPUTED,KEY_DIRECT,init,getOptions,startCollectDeps,endCollectDeps, getPropertyDescriptors} from "./object";
+import {KEY_OBSERVABLE,KEY_COMPUTED,KEY_DIRECT,KEY_ACTION,init,getOptions,startCollectDeps,endCollectDeps, getPropertyDescriptors} from "./object";
 export function createProxy<T extends Object>(target:T):T{
 	var Class=target.constructor;
 	var proxy=Object.create(Class.prototype);
 	var obs:string[]=Class[KEY_OBSERVABLE];
 	var coms:string[]=Class[KEY_COMPUTED];
 	var dirs:string[]=Class[KEY_DIRECT];
+	var actions:string[]=Class[KEY_ACTION];
 	init(proxy,target,Class)
 	if(dirs){
 		dirs.forEach(function(key){
@@ -71,6 +72,15 @@ export function createProxy<T extends Object>(target:T):T{
 					configurable:false
 				});
 			}
+		});
+	}
+	if(actions){
+		actions.forEach(function(action){
+			var options=getOptions(this);
+			options.target=function(){
+				
+			}
+			proxy
 		});
 	}
 	return proxy;

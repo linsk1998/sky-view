@@ -4,8 +4,6 @@ import { LinekedList,LinekedListItem } from "../list";
 var hasOwnProperty=Object.prototype.hasOwnProperty;
 
 export const KEY_OBSERVABLE="@@observable";
-export const KEY_COMPUTED="@@computed";
-export const KEY_DIRECT="@@direct";
 export function observable(prototype:any,prop:string){
 	var Class=prototype.constructor;
 	var obs=Class[KEY_OBSERVABLE];
@@ -18,6 +16,7 @@ export function observable(prototype:any,prop:string){
 	}
 	obs.push(prop);
 }
+export const KEY_COMPUTED="@@computed";
 export function computed(prototype:any,prop:string){
 	var Class=prototype.constructor;
 	var computeds=Class[KEY_COMPUTED];
@@ -30,6 +29,7 @@ export function computed(prototype:any,prop:string){
 	}
 	computeds.push(prop);
 }
+export const KEY_DIRECT="@@direct";
 export function direct(prototype:any,prop:string){
 	var Class=prototype.constructor;
 	var dirs=Class[KEY_DIRECT];
@@ -42,6 +42,19 @@ export function direct(prototype:any,prop:string){
 	}
 	dirs.push(prop);
 }
+export const KEY_ACTION="@@action";
+export function action(prototype:any,prop:string){
+	var Class=prototype.constructor;
+	var actions=Class[KEY_ACTION];
+	if(!hasOwnProperty.call(Class,KEY_ACTION)){
+		if(actions){
+			actions=Class[KEY_ACTION]=Array.from(actions);
+		}else{
+			actions=Class[KEY_ACTION]=new Array();
+		}
+	}
+	actions.push(prop);
+}
 
 
 const KEY_OPTIONS=Symbol();
@@ -53,6 +66,7 @@ interface ObservableObjectOptions{
 	owners:LinekedList<Owner>,
 	proxy?:any,
 	target:any,
+	actionStack:number,
 	computedDeps?:Record<string,Set<string>>,
 	computedOnWatchs?:Set<string>,
 	afterSetEmitter:EventEmitter,
@@ -97,6 +111,7 @@ export function init(obj:any,target:any,Class:any):obj is ObservableObject{
 	var options:ObservableObjectOptions={
 		owners:new LinekedList<Owner>(),
 		target:target,
+		actionStack:0,
 		afterSetEmitter:new EventEmitter(),
 		beforeGetEmitter:new EventEmitter()
 	};
