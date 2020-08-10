@@ -5,11 +5,14 @@
 			"ES5",
 			"ES2015.Core",
 			"ES2015.Iterable",
+			"ES2015.Collection",
+			"ES2015.Symbol",
 			"ES2015.Promise",
 			"ES2015.Reflect",
 			"ES2015.Symbol",
 			"ES2016.Array.Include",
 			"ES2017.String",
+			"ES2017.Object",
 			"ES2019.String"
 		],
 		"experimentalDecorators": true, // 启用实验性的ES装饰器

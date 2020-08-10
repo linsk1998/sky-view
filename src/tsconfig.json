@@ -1,11 +1,10 @@
 {
+	"extends": "../tsconfig",
 	"compilerOptions": {
-		"jsx": "react", // 在 .tsx文件里支持JSX
 		"sourceMap": true, // 是否生成map文件
 		"module": "AMD", // 指定生成哪个模块系统代码
 		"target": "ES3",
-		"outFile": "../dist/index.js",
-		"experimentalDecorators": true, // 启用实验性的ES装饰器
+		"outFile": "../dist/index.js"
 	},
 	"include": [
 		"./**/*"
