@@ -78,9 +78,8 @@ export function createProxy<T extends Object>(target:T):T{
 		actions.forEach(function(action){
 			var options=getOptions(this);
 			options.target=function(){
-				
+				actionStack++;
 			}
-			proxy
 		});
 	}
 	return proxy;

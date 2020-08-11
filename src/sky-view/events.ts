@@ -24,11 +24,17 @@ export class EventEmitter extends LinekedList<Event>{
 		});
 		return this;
 	}
-	emit(name?:string,...args:any[]){
-		this.forEach(function(event){
+	/**
+	 * @description 发射事件
+	 * @param name 事件名
+	 * @param args 参数
+	 * @returns 如果执行完成返回true，如果中断返回false
+	 */
+	emit(name?:string,...args:any[]):boolean{
+		return this.forEach(function(event){
 			if(!name || !event.name || event.name==name){
 				try{
-					event.action.apply(event.thisArg,args);
+					return event.action.apply(event.thisArg,args);
 				}catch(e){
 					console.error(e);
 				}

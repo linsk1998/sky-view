@@ -136,17 +136,21 @@ export class LinekedList<T extends LinekedListItem=LinekedListItem>{
 	/**
 	 * 遍历执行
 	 */
-	forEach(callback:(currentValue:T, index:number, list:this)=>void,thisArg?:object):void{
+	forEach(callback:(currentValue:T, index:number, list:this)=>void,thisArg?:object):boolean{
 		if(this.length===0){
 			return ;
 		}
 		var i=0;
 		var current=this.head;
 		do{
-			callback.call(thisArg,current,i,this);
+			var r=callback.call(thisArg,current,i,this);
+			if(r===false){
+				return false;
+			}
 			i++;
 			current=current.next;
 		}while(current);
+		return true;
 	}
 	/**
 	 * 用来判断是否包含一个指定的值，根据情况，如果包含则返回 true，否则返回false。
