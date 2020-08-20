@@ -3,17 +3,17 @@ import { LinekedList, LinekedListItem } from "./list";
 export interface Event extends LinekedListItem{
 	name:string,
 	action:Function,
-	thisArg:object
+	thisArg:any
 }
 export class EventEmitter extends LinekedList<Event>{
-	on(name:string,action:Function,thisArg?:object):this{
+	on(name:string,action:Function,thisArg?:any):Event{
 		var reaction:Event={
 			name,action,thisArg
 		};
 		this.push(reaction);
-		return this;
+		return reaction;
 	}
-	off(name?:string,action?:Function):this{
+	off(name?:string,action?:Function){
 		this.filter(function(current){
 			if(!action || current.action===action){
 				if(!name || name==current.name){
@@ -22,7 +22,6 @@ export class EventEmitter extends LinekedList<Event>{
 			}
 			return true;
 		});
-		return this;
 	}
 	/**
 	 * @description 发射事件

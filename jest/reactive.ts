@@ -1,5 +1,5 @@
-import { createProxy } from "../src/sky-view/reactive/ObservableObject";
-import { direct, observable, computed,onAfterSet, offAfterSet, action } from "../src/sky-view/reactive/object";
+import { createObject } from "../src/sky-view/reactive/observableFactory";
+import { direct, observable, computed,onAfterSet, offAfterSet, action, removeAfterSet } from "../src/sky-view/reactive/object";
 
 class Animal{
 	@direct
@@ -39,7 +39,7 @@ class Cat extends Animal{
 }
 test('class', () => {
 	var animal={};
-	var proxy=createProxy(animal,Animal);
+	var proxy=createObject(animal,Animal);
 	//direct
 	var afterSetName=false;
 	onAfterSet(proxy,"name",function onAfterSetName(name,value){
@@ -73,7 +73,7 @@ test('class', () => {
 });
 test('extends', () => {
 	var animal={};
-	var proxy=createProxy(animal,Cat);
+	var proxy=createObject(animal,Cat);
 	//direct
 	var afterSetName=false;
 	onAfterSet(proxy,"name",function onAfterSetName(name,value){
@@ -104,7 +104,7 @@ test('extends', () => {
 	proxy.birthday=new Date();
 	expect(afterSetAge).toBe(1);
 	expect(afterSetBirthday).toBe(1);
-	offAfterSet(proxy,"age",onAfterSetAge);
+	removeAfterSet(proxy,onAfterSetAge);
 	//action
 	onAfterSet(proxy,"age",function(name,value){
 		afterSetAge++;

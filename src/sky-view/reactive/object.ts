@@ -1,4 +1,4 @@
-import { EventEmitter } from "../events";
+import { EventEmitter,Event } from "../events";
 import { LinekedList,LinekedListItem } from "../list";
 
 var hasOwnProperty=Object.prototype.hasOwnProperty;
@@ -86,15 +86,20 @@ export function getOptions(obj:any):ObservableObjectOptions{
 /**
  * 对象属性监听
  */
-export function onAfterSet(obj:any,key:string,action:Action):Action{
+export function onAfterSet(obj:any,key:string,action:Action):Event{
 	var options=getOptions(obj);
 	if(options===void 0){
 		return ;
 	}
-	options.afterSetEmitter.on(key,action);
-	return action;
+	return options.afterSetEmitter.on(key,action);
 }
-
+export function removeAfterSet(obj:any,event:Event){
+	var options=getOptions(obj);
+	if(options===void 0){
+		return ;
+	}
+	return options.afterSetEmitter.remove(event);
+}
 /**
  * 取消对象属性监听
  */
@@ -133,7 +138,7 @@ export function init(obj:any,target:any,Class:any):obj is ObservableObject{
 	options.afterSetEmitter.on(null,function(key:string,value:any){
 		options.owners.forEach(function(owner,index,list){
 			var k=owner.key+"."+key;
-			emitAfterSet(owner,k,value);
+			emitAfterSet(owner.object,k,value);
 		});
 	});
 	options.beforeGetEmitter.on(null,function(key:string){
@@ -169,6 +174,12 @@ export function init(obj:any,target:any,Class:any):obj is ObservableObject{
 		},options);
 	}
 	return true;
+}
+export function emitAfterSetOwn(obj:any){
+	var options=getOptions(obj);
+	options.owners.forEach(function(owner,index,list){
+		emitAfterSet(owner.object,owner.key,obj);
+	});
 }
 export function get(obj:any,key:string){
 	var options=getOptions(obj);

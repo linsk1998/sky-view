@@ -1,6 +1,6 @@
 
 import {KEY_OBSERVABLE,KEY_COMPUTED,KEY_DIRECT,KEY_ACTION,init, get, set, getObservable, setObservable, getComputed, setComputed, doAction} from "./object";
-export function createProxy<T extends Object>(target:object,Class:new()=>T):T{
+export function createObject<T extends Object>(target:object,Class:new()=>T):T{
 	var prototype=Class.prototype;
 	var proxy=Object.create(prototype);
 	var obs:string[]=Class[KEY_OBSERVABLE];

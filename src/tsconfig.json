@@ -3,7 +3,7 @@
 	"compilerOptions": {
 		"sourceMap": true, // 是否生成map文件
 		"module": "AMD", // 指定生成哪个模块系统代码
-		"target": "ES3",
+		"target": "ES5",
 		"outFile": "../dist/index.js"
 	},
 	"include": [
