@@ -1,13 +1,12 @@
-import { ElementComponent, ElementProps } from "./ElementComponent";
-import { computed } from "../reactive/object";
+import { ElementProps } from "../ElementComponent";
+import { HtmlComponent } from "../HtmlComponent";
 
 
-export class ArticleComponent extends ElementComponent<HTMLElement>{
+export class Article extends HtmlComponent<HTMLElement>{
 	constructor(props:ElementProps){
 		if(!props.tagName) props.tagName="ARTICLE";
 		super(props);
 	}
-	@computed
 	get innerHTML(){
 		return this.el.innerHTML;
 	}

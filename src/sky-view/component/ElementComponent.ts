@@ -1,9 +1,12 @@
 import { direct, computed } from "../reactive/object";
-import { ClassList } from "./ClassList";
-import { Component } from "./Component";
+import { ClassList } from "../dom/ClassList";
+import { Component } from "../render/Component";
 import { EventEmitter } from "../events";
-import { attachEvent, detachEvent } from "sky-core";
+import { attachEvent } from "sky-core";
+import { detachEvent } from "sky-core";
 import { watcher, fixEvent, proxy } from "../dom/event";
+import { Tag } from "../render/Tag";
+import { render } from "../render";
 
 
 export interface ElementProps{
@@ -12,13 +15,13 @@ export interface ElementProps{
 	classList?:ArrayLike<string>
 }
 
-export abstract class  ElementComponent<T=Element> implements Component{
+export abstract class  ElementComponent<T extends Element=Element> implements Component{
 	@direct
 	protected _children:Component[];
 	@direct
 	protected _parentNode:Node;
 	@direct
-	public el:Element;
+	public el:T;
 	@computed
 	get className():string{
 		return this.el.className;
@@ -32,13 +35,18 @@ export abstract class  ElementComponent<T=Element> implements Component{
 	@direct
 	public readonly tagName:string;
 	protected props:ElementProps;
-	constructor(props:ElementProps){
+	protected tags:Tag[];
+	constructor(props:ElementProps,tags?:Tag[]){
 		this.tagName=props.tagName;
-		this.el=document.createElement(props.tagName);
 		this.props=props;
+		this.tags=tags;
 	}
 	/** 添加到文档上 */
 	public renderTo(parent: Node): void {
+		this._parentNode=parent;
+		for(var i=0;i<this.tags.length;i++){
+			render(this.tags[i],this.el);
+		}
 		parent.appendChild(this.el);
 		this.componentDidMount();
 	}
@@ -49,10 +57,16 @@ export abstract class  ElementComponent<T=Element> implements Component{
 	/** 添加元素 */
 	public appandChild(child:Component){
 		child.renderTo(this.el);
+		this._children.push(child);
 	}
 	/** 销毁 */
 	public destroy(){
 		this.componentWillUnmount();
+		var i=this._children.length;
+		while(i-->0){
+			var child=this._children[i];
+			child.destroy();
+		}
 		this._events.forEach(removeEventListener,this.el);
 		var parent=this.el.parentNode;
 		if(parent){
@@ -73,7 +87,7 @@ export abstract class  ElementComponent<T=Element> implements Component{
 	protected _eventEmitter=new EventEmitter();
 	@direct
 	protected _events?:Map<string,Function>;
-	/** 添加事件 */
+	/** 添加事件绑定 */
 	public on(name:string, callback:Function, thisArg:any){
 		if(this._eventEmitter.find((item)=>item.name==name && item.action===callback)){
 			return ;
@@ -88,7 +102,7 @@ export abstract class  ElementComponent<T=Element> implements Component{
 		this._eventEmitter.off(name,callback);
 	}
 	public emit(name:string,...args:any[]){
-		this._eventEmitter.emit.apply(this._eventEmitter,arguments)
+		this._eventEmitter.emit.apply(this._eventEmitter,arguments);
 	}
 	public getAttribute(name:string){
 		return this.el.getAttribute(name);

@@ -1,3 +1,4 @@
+
 export interface Component{
 	renderTo(parent:Node):void;
 	destroy():void;

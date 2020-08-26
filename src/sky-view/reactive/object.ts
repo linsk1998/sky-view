@@ -223,7 +223,6 @@ export function setComputed(obj:any,key:string,value:any){
 }
 export function doAction(obj:any,fn:Function,args:ArrayLike<any>){
 	var options=getOptions(obj);
-	var proto=Object.getPrototypeOf(obj);
 	try{
 		startAction(options);
 		var value=Reflect.apply(fn,obj,args);
