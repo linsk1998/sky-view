@@ -1,16 +1,13 @@
-import { ElementComponent, ElementProps } from "../ElementComponent";
 import { HtmlComponent } from "../HtmlComponent";
 import { observable } from "../../reactive/object";
+import { Tag } from "../../render/Tag";
+import { ButtonAttributes } from "../attributes";
 
-interface ButtonProps extends ElementProps{
-	type:"button"|"submit"|"reset",
-	disabled:boolean
-}
 export class Button extends HtmlComponent<HTMLButtonElement>{
 	public readonly type:string;
-	constructor(props:ButtonProps){
+	constructor(props:ButtonAttributes,tags:Tag[]){
 		if(!props.tagName) props.tagName="BUTTON";
-		super(props);
+		super(props,tags);
 		this.type=props.type;
 	}
 	@observable

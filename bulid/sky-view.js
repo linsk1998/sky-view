@@ -3,7 +3,7 @@ import typescript from '@rollup/plugin-typescript';
 export default {
 	input: './src/sky-view.ts',
 	output: {
-		file: './dist/sky-view.modern.js',
+		file: './dist/sky-view.js',
 		format: 'amd',
 		amd: {
 			id: 'sky-view'
@@ -16,11 +16,7 @@ export default {
 	plugins:[
 		typescript({
 			tsconfig:"./tsconfig.json",
-			tslib: "./libs/tslib.esm.js",
-			baseUrl:"./src",
-			paths:{
-				"sky-view/dom/event":["modern/dom/event"]
-			}
+			tslib: "./libs/tslib.esm.js"
 		})
 	]
 };

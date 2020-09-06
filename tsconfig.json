@@ -17,11 +17,14 @@
 		],
 		"experimentalDecorators": true, // 启用实验性的ES装饰器
 		"jsx": "react", // 在 .tsx文件里支持JSX
-		"sourceMap": true, // 是否生成map文件
+		"sourceMap": false, // 是否生成map文件
 		"module": "ES6", // 指定生成哪个模块系统代码
 		"target": "ES5",
 		"esModuleInterop":true,
 		"typeRoots": ["./node_modules","./node_modules/@types"],
-		"types": ["sky-core","jest"]
-	}
+		"types": ["sky-core"]
+	},
+	"include": [
+		"./src/**/*"
+	]
 }

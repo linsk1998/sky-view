@@ -9,3 +9,6 @@ interface Document {
 interface WheelEvent{
 	wheelDelta:number
 }
+interface HTMLElement{
+	readonly runtimeStyle?: CSSStyleDeclaration;
+}

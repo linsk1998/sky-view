@@ -1,11 +1,12 @@
-import { ElementProps } from "../ElementComponent";
+import { ElementAttributes } from "../attributes";
 import { HtmlComponent } from "../HtmlComponent";
+import { Tag } from "../../render/Tag";
 
 
 export class Article extends HtmlComponent<HTMLElement>{
-	constructor(props:ElementProps){
+	constructor(props:ElementAttributes,tags:Tag[]){
 		if(!props.tagName) props.tagName="ARTICLE";
-		super(props);
+		super(props,tags);
 	}
 	get innerHTML(){
 		return this.el.innerHTML;

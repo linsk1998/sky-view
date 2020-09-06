@@ -4,17 +4,18 @@ import { Component } from "../render/Component";
 import { EventEmitter } from "../events";
 import { attachEvent } from "sky-core";
 import { detachEvent } from "sky-core";
-import { watcher, fixEvent, proxy } from "../dom/event";
+import { watcher, fixEvent, proxy } from "sky-view/dom/event";
 import { Tag } from "../render/Tag";
 import { render } from "../render";
+import { ElementAttributes } from "./attributes";
 
-
-export interface ElementProps{
-	tagName?:string,
-	className?:string,
-	classList?:ArrayLike<string>
+export function initAttributesLowerCase(keys:string[],el:Element,attrs:Record<string,any>){
+	for(var key of keys){
+		if(key in attrs){
+			el.setAttribute(key.toLowerCase(),attrs[key]);
+		}
+	}
 }
-
 export abstract class  ElementComponent<T extends Element=Element> implements Component{
 	@direct
 	protected _children:Component[];
@@ -34,12 +35,32 @@ export abstract class  ElementComponent<T extends Element=Element> implements Co
 	public readonly classList:ClassList;
 	@direct
 	public readonly tagName:string;
-	protected props:ElementProps;
 	protected tags:Tag[];
-	constructor(props:ElementProps,tags?:Tag[]){
-		this.tagName=props.tagName;
-		this.props=props;
+	constructor(attrs:ElementAttributes,tags:Tag[]){
+		this.tagName=attrs.tagName;
 		this.tags=tags;
+		if(!attrs.tagName){
+			throw new Error("tagName is not define");
+		}
+		if(!attrs.tagName.includes(":")){
+			this.el=document.createElement(attrs.tagName) as any;
+		}// TODO ELSE SVG
+		if('class' in attrs){
+			this.el.className=attrs['class'];
+		}
+		if('className' in attrs){
+			this.el.className=attrs.className;
+		}
+		this.classList=new ClassList(this.el);
+		if(attrs.classList){
+			for(var className of attrs.classList){
+				this.classList.add(className);
+			}
+		}
+		if(attrs.id){
+			this.el.id=attrs.id;
+		}
+		initAttributesLowerCase(['itemProp','itemScope','itemType','itemID','itemRef','unselectable'],this.el,attrs);
 	}
 	/** 添加到文档上 */
 	public renderTo(parent: Node): void {
@@ -126,3 +147,4 @@ function bindDomEvent(com:ElementComponent,name:string,events:Map<string,Functio
 function removeEventListener(callback:Function,name:string){
 	detachEvent(this,name,callback);
 }
+

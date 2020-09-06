@@ -1,12 +1,13 @@
-import { DivProps,Div } from "./component/html/Div";
+import { Div } from "./component/html/Div";
 import { ComponentConstructor } from "./render/ComponentConstructor";
 import { HtmlComponent } from "./component/HtmlComponent";
 import { Tag } from "./render/Tag";
 import { Out, TextProps } from "./tags/core/Out";
+import { DivAttributes } from "./component/attributes";
 
 
 
-function tag(type:"div", props:DivProps, ...children:Child[]):Tag;
+function tag(type:"div", props:DivAttributes, ...children:Child[]):Tag;
 function tag(type:string, props:Record<string,any>, ...children:Child[]):Tag;
 function tag(type:string | ComponentConstructor, props:any, ...children:Child[]):Tag;
 function tag(type:string | ComponentConstructor,props:any):Tag{

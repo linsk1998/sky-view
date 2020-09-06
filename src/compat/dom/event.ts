@@ -12,9 +12,6 @@ export var watcher:Record<string,string>={};
 export var proxy:Record<string,(e:Event)=>string | void>={};
 var receiver:Record<string,(e:Event)=>void>={};
 export function fixEvent(e:any):Event{
-	if(e){
-		return e;
-	}
 	e=window.event;
 	e.target=e.srcElement;
 	e.stopPropagation=stopPropagation;
@@ -30,12 +27,6 @@ if(!("onwheel" in document)){
 	if('onmousewheel' in document){
 		watcher.wheel='mousewheel';
 		proxy.mousewheel=function(){ return "wheel";};
-	}else{
-		watcher.wheel='DOMMouseScroll';
-		proxy.DOMMouseScroll=function(e:WheelEvent){
-			e.wheelDelta=-e.detail*40;
-			return 'wheel';
-		};
 	}
 }
 watcher.input='propertychange';
@@ -49,31 +40,12 @@ proxy.propertychange=function(e:PropertyChangeEvent){
 		}
 	}
 };
-if('onmouseenter' in document as any){
-	if(!window.MouseEvent || !MouseEvent.prototype.relatedTarget){
-		receiver.mouseenter=function(e:any){
-			e.relatedTarget=e.fromElement;
-		};
-		receiver.mouseleave=function(e:any){
-			e.relatedTarget=e.toElement;
-		};
-	}
-}else if(!document.attachEvent){
-	watcher.mouseenter='mouseover';
-	proxy.mouseover=function(e:MouseEvent){
-		var related=e.relatedTarget;
-		if(related!==this && !this.contains(related)){
-			return "mouseenter";
-		}
-	};
-	watcher.mouseleave='mouseout';
-	proxy.mouseout=function(e:MouseEvent){
-		var related=e.relatedTarget;
-		if( related!==this && !this.contains(related) ){
-			return "mouseleave";
-		}
-	}
-}
+receiver.mouseenter=function(e:any){
+	e.relatedTarget=e.fromElement;
+};
+receiver.mouseleave=function(e:any){
+	e.relatedTarget=e.toElement;
+};
 function stopPropagation(){
 	this.cancelBubble=true;
 }

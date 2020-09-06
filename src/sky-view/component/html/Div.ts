@@ -1,14 +1,12 @@
-import { ElementProps } from "../ElementComponent";
-import { HtmlComponent } from "../HtmlComponent";
 
-type Align="left" | "right" | "center";
-export interface DivProps extends ElementProps{
-	align?:Align
-}
+import { HtmlComponent } from "../HtmlComponent";
+import { Tag } from "../../render/Tag";
+import { DivAttributes } from "../attributes";
+
 export class Div extends HtmlComponent<HTMLDivElement>{
 
-	constructor(props?:DivProps){
+	constructor(props:DivAttributes,tags:Tag[]){
 		if(!props.tagName) props.tagName="DIV";
-		super(props);
+		super(props,tags);
 	}
 }
